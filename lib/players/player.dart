@@ -4,9 +4,13 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:pragma_game/obstacles/obstacle.dart';
+import 'package:pragma_game/obstacles/win.dart';
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameRef, KeyboardHandler, CollisionCallbacks {
+  Player(this.verifyLife);
+
+  final VoidCallback verifyLife;
   Vector2 velocity = Vector2.zero();
   Vector2 movement = Vector2.zero();
 
@@ -96,7 +100,12 @@ class Player extends SpriteAnimationGroupComponent
     super.onCollisionStart(intersectionPoints, other);
 
     if (other is Obstacle) {
+      verifyLife();
       position = Vector2(50, game.size.y / 2);
+    }
+    if (other is Win) {
+      game.pauseEngine();
+      game.overlays.add('win');
     }
   }
 }

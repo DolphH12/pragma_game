@@ -2,11 +2,20 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
 class Obstacle extends SpriteComponent with HasGameRef, CollisionCallbacks {
+  final Sprite spriteCar;
+  final int direction;
+  final double positionX;
+
+  Obstacle(
+    this.spriteCar,
+    this.positionX,
+    this.direction,
+  );
+
   @override
   Future<void> onLoad() async {
-    sprite = await gameRef.loadSprite('elementos/Ready-to-move_Carro-1.png');
+    sprite = spriteCar;
     size = Vector2(100, 150);
-    position = Vector2(1280 / 2, 720 / 2);
 
     final shapeHitbox = RectangleHitbox(
       size: Vector2(80, 130),
@@ -14,5 +23,26 @@ class Obstacle extends SpriteComponent with HasGameRef, CollisionCallbacks {
     );
 
     add(shapeHitbox);
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    // Posición inicial en la parte superior del carril (puedes ajustar x para el carril)
+    position = Vector2(positionX, direction == 1 ? -size.y : 720);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    // Mueve el carro hacia abajo
+    position.y += (200 * dt) * direction;
+
+    // Opcional: Si el carro sale de la pantalla, puedes reiniciar su posición
+    if (position.y > 720 && direction == 1) {
+      removeFromParent();
+    } else if (position.y < 0 && direction == -1) {
+      removeFromParent();
+    }
   }
 }

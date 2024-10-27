@@ -1,32 +1,19 @@
-import 'dart:async';
-
-import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-import 'levels/level.dart';
-
-class GameWorld extends FlameGame
-    with HasKeyboardHandlerComponents, HasCollisionDetection {
-  CameraComponent? cam;
-
-  @override
-  Future<void> onLoad() async {
-    final level = Level();
-
-    cam = CameraComponent.withFixedResolution(
-      world: level,
-      width: 1280,
-      height: 720,
-    );
-
-    cam!.viewfinder.anchor = Anchor.topLeft;
-
-    addAll([cam!, level]);
-  }
-}
+import 'game_world.dart';
+import 'overlays/game_over_overlay.dart';
+import 'overlays/start_overlay.dart';
+import 'overlays/win_overlay.dart';
 
 void main() {
-  runApp(GameWidget(game: GameWorld()));
+  runApp(GameWidget(
+    game: GameWorld(),
+    overlayBuilderMap: {
+      'start': (context, GameWorld game) => StartOverlay(game),
+      'gameOver': (context, GameWorld game) => GameOverOverlay(game),
+      'win': (context, GameWorld game) => WinOverlay(game),
+    },
+    initialActiveOverlays: const ['start'],
+  ));
 }
