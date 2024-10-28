@@ -16,7 +16,7 @@
 
 #### **Requisitos Previos**
 
-- **Instalación de Flutter**: Asegúrate de tener Flutter instalado o haz uso de herramientas como:].
+- **Instalación de Flutter**: Asegúrate de tener Flutter instalado o haz uso de herramientas como:
 - **IDE Configurado**: Recomienda utilizar Visual Studio Code o Android Studio.
 
 ---
@@ -253,9 +253,9 @@
         final runFrames = [
         await gameRef.loadSprite('personaje/Personaje-F1.png'),
         await gameRef.loadSprite('personaje/Personaje-F2.png'),
-        await gameRef.loadSprite('personaje/Personaje-F5.png'),
-        await gameRef.loadSprite('personaje/Personaje-F4.png'),
         await gameRef.loadSprite('personaje/Personaje-F3.png'),
+        await gameRef.loadSprite('personaje/Personaje-F4.png'),
+        await gameRef.loadSprite('personaje/Personaje-F5.png'),
         ];
 
         animations = {
