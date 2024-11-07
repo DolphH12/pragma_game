@@ -1,16 +1,14 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 
 class Obstacle extends SpriteComponent with HasGameRef, CollisionCallbacks {
   final Sprite spriteCar;
   final int direction;
   final double positionX;
+  final VoidCallback verifyLife;
 
-  Obstacle(
-    this.spriteCar,
-    this.positionX,
-    this.direction,
-  );
+  Obstacle(this.spriteCar, this.positionX, this.direction, this.verifyLife);
 
   @override
   Future<void> onLoad() async {

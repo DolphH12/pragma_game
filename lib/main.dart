@@ -1,3 +1,4 @@
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +7,11 @@ import 'overlays/game_over_overlay.dart';
 import 'overlays/start_overlay.dart';
 import 'overlays/win_overlay.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Flame.device.fullScreen();
+  await Flame.device.setLandscape();
+
   runApp(GameWidget(
     game: GameWorld(),
     overlayBuilderMap: {

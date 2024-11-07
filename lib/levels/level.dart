@@ -11,12 +11,14 @@ import '../players/player.dart';
 class Level extends World with HasGameRef {
   final Random _random = Random();
   late SpriteComponent background;
-  late Player player;
+  final Player player;
   late Obstacle obstacle;
   late Win win;
   late TextComponent lifeText;
   int playerLives = 3;
   bool isGameOver = false;
+
+  Level({required this.player});
 
   final List<String> carImagesCarril1 = [
     'elementos/Ready-to-move_Carro-1.png',
@@ -66,8 +68,6 @@ class Level extends World with HasGameRef {
       sprite: await gameRef.loadSprite('elementos/escenario.png'),
       size: Vector2(1280, 720),
     );
-
-    player = Player(verifyLife);
     win = Win();
 
     add(background);
@@ -84,6 +84,8 @@ class Level extends World with HasGameRef {
       repeat: true,
       onTick: spawnCarCarril2,
     ));
+
+    player.position = Vector2(50, game.size.y / 2);
 
     add(lifeText);
     add(player);
@@ -121,7 +123,7 @@ class Level extends World with HasGameRef {
     final carSprite = await game.loadSprite(carImagesCarril1[imageIndex]);
 
     // Crear el componente del carro y establecer su posición
-    final car = Obstacle(carSprite, carrilPosition1[laneIndex], 1);
+    final car = Obstacle(carSprite, carrilPosition1[laneIndex], 1, verifyLife);
 
     add(car); // Agregar el carro al juego
   }
@@ -135,8 +137,40 @@ class Level extends World with HasGameRef {
     final carSprite = await game.loadSprite(carImagesCarril2[imageIndex]);
 
     // Crear el componente del carro y establecer su posición
-    final car = Obstacle(carSprite, carrilPosition2[laneIndex], -1);
+    final car = Obstacle(carSprite, carrilPosition2[laneIndex], -1, verifyLife);
 
     add(car); // Agregar el carro al juego
+  }
+
+  void updateJoystick(JoystickComponent joystick) {
+    switch (joystick.direction) {
+      case JoystickDirection.up:
+        player.movement = Vector2(0, -1);
+        break;
+      case JoystickDirection.upLeft:
+        player.movement = Vector2(-1, -1);
+        break;
+      case JoystickDirection.downLeft:
+        player.movement = Vector2(-1, 1);
+        break;
+      case JoystickDirection.left:
+        player.movement = Vector2(-1, 0);
+        break;
+      case JoystickDirection.upRight:
+        player.movement = Vector2(1, -1);
+        break;
+      case JoystickDirection.downRight:
+        player.movement = Vector2(1, 1);
+        break;
+      case JoystickDirection.right:
+        player.movement = Vector2(1, 0);
+        break;
+      case JoystickDirection.down:
+        player.movement = Vector2(0, 1);
+        break;
+      default:
+        player.movement = Vector2.zero();
+        break;
+    }
   }
 }
